@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "rootDirs": ["src/main/assets","src/test/assets"],
+    "baseUrl": ".",
+        "paths": {
+      "*": [
+        "*",
+        "target/web/node-modules/main/webjars/*",
+        "target/web/node-modules/test/webjars/*",
+        "project/target/node-modules/webjars/*"
+      ]
+    },
+    "noImplicitAny":true,
+    "noFallthroughCasesInSwitch":true,
+    "noImplicitReturns":true,
+    "noImplicitThis":true,
+    "strictNullChecks":true,
+    "lib": ["es6"],
+    "removeComments": true,
+    "outDir": "./src/main/resources"
+  },
+  "exclude": [
+    "node_modules",
+    "project/target",
+    "example",
+    "typings/main",
+    "target/web"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "random": false,
+  "spec_dir": "/Users/joost1/source/sbt-js-test/example/target/web/public/test",
+  "stopSpecOnExpectationFailure": false,
+  "spec_files": [
+    "barSpec.js",
+    "foo.spec.js"
+  ],
+  "helpers": [
+    "helpers/**/*.js"
+  ]
+}

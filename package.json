@@ -1,0 +1,21 @@
+{
+    "version": "0.0.1",
+  "name": "sbt-jstest",
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w",
+    "jasmineExample": "jasmine JASMINE_CONFIG_PATH=example/target/web/public/test/jasmine.json"
+  },
+  "dependencies": {
+    "jasmine": "2.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "4.0.29",
+    "@types/jasmine": "2.5.40",
+    "typescript": "2.1.4"
+  },
+  "engines": {
+    "node": "7.2.1",
+    "npm": ">= 3"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "amd",
+    "rootDir": "src/main/assets",
+    "noImplicitAny":true,
+    "noFallthroughCasesInSwitch":true,
+    "noImplicitReturns":true,
+    "noImplicitThis":true,
+    "noEmitOnError": true,
+    "strictNullChecks":true,
+ //   "lib": ["es6"],
+    "removeComments": true,
+    "outFile": "./src/main/resources/jasmine.js"
+  },
+  "exclude": [
+    "node_modules",
+    "project/target",
+    "example",
+    "typings/main",
+    "target/web"
+  ]
+}
