@@ -19,7 +19,8 @@
     "strictNullChecks":true,
     "lib": ["es6"],
     "removeComments": true,
-    "outDir": "./src/main/resources"
+    "outDir": "./src/main/resources",
+    "typeRoots": ["target/web/node-modules/main/webjars/@types","target/web/node-modules/test/webjars/@types"]
   },
   "exclude": [
     "node_modules",

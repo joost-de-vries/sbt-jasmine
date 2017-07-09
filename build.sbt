@@ -1,7 +1,7 @@
 sbtPlugin := true
 organization := "name.de-vries"
 name := "sbt-jasmine"
-version := "0.0.1SNAPSHOT"
+version := "0.0.2"
 
 
 scalaVersion := "2.10.6"
@@ -16,14 +16,14 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.webjars.npm" % "jasmine" % "2.4.1",
+  "org.webjars.npm" % "jasmine" % "2.6.0",
   "org.webjars" % "npm" % "3.9.3"
 )
 
 dependencyOverrides += "org.webjars.npm" % "glob" % "7.0.5"
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-js-engine" % "1.1.3")
-addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-js-engine" % "1.2.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.1")
 
 scriptedSettings
 scriptedLaunchOpts <+= version apply { v => s"-Dproject.version=$v" }
