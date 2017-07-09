@@ -1,7 +1,7 @@
 sbtPlugin := true
 organization := "name.de-vries"
 name := "sbt-jasmine"
-version := "0.0.2"
+version := "0.0.3"
 
 
 scalaVersion := "2.10.6"
@@ -16,8 +16,7 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.webjars.npm" % "jasmine" % "2.6.0",
-  "org.webjars" % "npm" % "3.9.3"
+  "org.webjars.npm" % "jasmine" % "2.4.1"  // using 2.6.0 doesn't resolve correctly..
 )
 
 dependencyOverrides += "org.webjars.npm" % "glob" % "7.0.5"
