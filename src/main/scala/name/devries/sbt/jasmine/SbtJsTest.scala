@@ -42,16 +42,11 @@ object SbtJsTest extends AutoPlugin {
     jasmineConfigFile in jasmine := (sourceDirectory in TestAssets).value / "jasmine.json",
     jasmineFilter in jasmine := (jsFilter in TestAssets).value,
 
-    // Find the test files to run.  These need to be in the test assets target directory, however we only want to
-    // find tests that originally came from the test sources directories (both managed and unmanaged).
     jasmineTests := {
       val workDir: File = (assets in TestAssets).value
+      val compiledTestFiles: Seq[File] = recursiveListFiles(workDir)
       val testFilter: FileFilter = (jasmineFilter in jasmine).value
-      val testSources: Seq[File] = (sources in TestAssets).value ++ (managedResources in TestAssets).value
-      val testDirectories: Seq[File] = (sourceDirectories in TestAssets).value ++ (managedResourceDirectories in TestAssets).value
-      (testSources ** testFilter).pair(relativeTo(testDirectories)).map {
-        case (_, path) => workDir / path -> path
-      }
+      (compiledTestFiles ** testFilter).pair(relativeTo(workDir))
     },
 
     // Actually run the tests
@@ -149,6 +144,11 @@ object SbtJsTest extends AutoPlugin {
         new TestReporter(workDir, listeners).logTestResults(jsResults)
       }.getOrElse((TestResult.Failed, Map.empty[String, SuiteResult]))
     }
+  }
+
+  private def recursiveListFiles(f: File): Seq[File] = {
+    val files = f.listFiles
+    files ++ files.filter(_.isDirectory).flatMap(recursiveListFiles)
   }
 
   def parseJasmineConfig() = Def.task {
