@@ -5,7 +5,7 @@ A plugin for running jasmine tests from a Play application or using sbt-web.
 
 Add the plugin to `project/plugins.sbt`
 
-    addSbtPlugin("name.de-vries" % "sbt-jasmine" % "0.0.3")
+    addSbtPlugin("name.de-vries" % "sbt-jasmine" % "0.0.4")
    
 Put a `jasmine.json` file in your test assets directory. Either `test/assets` or `src/test/assets`. And put your jasmine tests in that same directory. 
    
