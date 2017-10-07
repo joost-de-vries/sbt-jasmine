@@ -1,10 +1,21 @@
+import sbt.CrossVersion
+import sbt.Keys.crossSbtVersions
+
 sbtPlugin := true
 organization := "name.de-vries"
 name := "sbt-jasmine"
-version := "0.0.3"
+version := "0.0.4"
 
 
-scalaVersion := "2.10.6"
+scalaVersion := (CrossVersion partialVersion sbtCrossVersion.value match {
+  case Some((0, 13)) => "2.10.6"
+  case Some((1, _))  => "2.12.3"
+  case _             => sys error s"Unhandled sbt version ${sbtCrossVersion.value}"
+})
+
+crossSbtVersions := Seq("0.13.16", "1.0.1")
+
+val sbtCrossVersion = sbtVersion in pluginCrossBuild
 scalacOptions ++= Seq(
   "-feature",
   "-encoding", "UTF8",
@@ -21,11 +32,10 @@ libraryDependencies ++= Seq(
 
 dependencyOverrides += "org.webjars.npm" % "glob" % "7.0.5"
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-js-engine" % "1.2.1")
-addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-js-engine" % "1.2.2")
+addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.2")
 
-scriptedSettings
-scriptedLaunchOpts <+= version apply { v => s"-Dproject.version=$v" }
+scriptedLaunchOpts +=   s"-Dproject.version=${version.value}"
 scriptedLaunchOpts += "-XX:MaxPermSize=256m"
 
 // Publish settings

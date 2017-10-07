@@ -5,6 +5,9 @@ A plugin for running jasmine tests from a Play application using sbt-web.
 
 
 ### Release notes
+#### v0.0.4
+- upgrade to sbt 1.0
+
 #### v0.0.3
 - downgrade to jasmine 2.4.1 because of strange npm dependency resolution problem
 

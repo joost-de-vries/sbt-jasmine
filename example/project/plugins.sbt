@@ -1,8 +1,6 @@
 lazy val root = Project("plugins", file(".")).dependsOn(plugin)
 
-lazy val plugin = file("../").getCanonicalFile.toURI
-
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2")
+lazy val plugin = RootProject(file("../").getCanonicalFile.toURI)
 
 resolvers ++= Seq(
   Resolver.sbtPluginRepo("releases"),

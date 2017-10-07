@@ -13,7 +13,7 @@ object Import {
   val jasmine = TaskKey[Unit]("jasmine", "Run js tests")
   val jasmineConfigFile = SettingKey[File]("jasmine-config-file", "The jasmine config file that will be merged with the jasmine config that sbt-jasmine manages. Default is <test assets dir>/jasmine.json. Ie for a Play app 'test/assets/jasmine.json'")
   val jasmineOnly = InputKey[Unit]("jasmine-only", "Execute the jasmine tests provided as arguments or all tests if no arguments are provided.", ATask)
-  val jasmineExecuteTests = TaskKey[(TestResult.Value, Map[String, SuiteResult])]("js-execute-tests", "Execute the js testss and return the result.", CTask)
+  val jasmineExecuteTests = TaskKey[(TestResult, Map[String, SuiteResult])]("js-execute-tests", "Execute the js testss and return the result.", CTask)
   val jasmineTests = TaskKey[Seq[PathMapping]]("jasmine-tests", "The tests that will be executed by jasmine.")
   val jasmineFilter = SettingKey[FileFilter]("jasmine-filter", "The files for jasmine to run. Default: (web-js-filter in TestAssets) ie GlobFilter(\"*Test.js\") | GlobFilter(\"*Spec.js\") .")
 }
@@ -49,7 +49,7 @@ object SbtJsTest extends AutoPlugin {
       val testFilter: FileFilter = (jasmineFilter in jasmine).value
       val testSources: Seq[File] = (sources in TestAssets).value ++ (managedResources in TestAssets).value
       val testDirectories: Seq[File] = (sourceDirectories in TestAssets).value ++ (managedResourceDirectories in TestAssets).value
-      (testSources ** testFilter).pair(relativeTo(testDirectories)).map {
+      (testSources ** testFilter).pair(Path.relativeTo(testDirectories)).map {
         case (_, path) => workDir / path -> path
       }
     },
@@ -58,11 +58,13 @@ object SbtJsTest extends AutoPlugin {
     jasmineExecuteTests := jasmineTestTask.value(jasmineTests.value),
 
     // This ensures that jasmine tests get executed when test is run
-    (executeTests in Test) <<= (executeTests in Test, jasmineExecuteTests).map { (output, jasmineResult) =>
+    (executeTests in Test) := {
+      val output = (executeTests in Test).value
+      val jasmineResult = jasmineExecuteTests.value
       val (result, suiteResults) = jasmineResult
       import TestResult._
 
-      // Merge the mocha result with the overall result of the rest of the tests
+      // Merge the jasmine result with the overall result of the rest of the tests
       val overallResult = (output.overall, result) match {
         case (Error, _) | (_, Error) => Error
         case (Failed, _) | (_, Failed) => Failed
@@ -110,8 +112,8 @@ object SbtJsTest extends AutoPlugin {
     * mocha-only, since they come from the command line input of that particular run, a function is the most convenient
     * way to do this.
     */
-  private val jasmineTestTask: Def.Initialize[Task[Seq[PathMapping] => (TestResult.Value, Map[String, SuiteResult])]] = Def.task {
-    { (tests: Seq[PathMapping]) =>
+  private val jasmineTestTask: Def.Initialize[Task[Seq[PathMapping] => (TestResult, Map[String, SuiteResult])]] = Def.task {
+    {
 
       val workDir: File = (assets in TestAssets).value
 
@@ -130,24 +132,31 @@ object SbtJsTest extends AutoPlugin {
       val options = SbtJasmineOptions((logLevel in jasmine).value.toString, parseJasmineConfig().value)
 
       val specDir = workDir.relativeTo(baseDirectory.value).getOrElse(throw new IllegalStateException)
-      println(s"spec dir $specDir")
-      val args = Args(tests, specDir, options)
+
+      val engineTypeValue = (engineType in jasmine).value
+      val commandValue = (command in jasmine).value
+      val shellSourceValue = (shellSource in jasmine).value
+      val stateValue = state.value
 
       import scala.concurrent.duration._
-      val results = SbtJsTask.executeJs(
-        state = state.value,
-        engineType = (engineType in jasmine).value,
-        command = (command in jasmine).value,
-        nodeModules = modules,
-        shellSource = (shellSource in jasmine).value,
-        args = args.toSeq,
-        100.days)
 
       val listeners = (testListeners in(Test, jasmine)).value
 
-      results.headOption.map { jsResults =>
-        new TestReporter(workDir, listeners).logTestResults(jsResults)
-      }.getOrElse((TestResult.Failed, Map.empty[String, SuiteResult]))
+      {
+        (tests: Seq[PathMapping]) =>
+          val args = Args(tests, specDir, options)
+          val results = SbtJsTask.executeJs(
+            state = stateValue,
+            engineType = engineTypeValue,
+            command = commandValue,
+            nodeModules = modules,
+            shellSource = shellSourceValue,
+            args = args.toSeq,
+            100.days)
+          results.headOption.map { jsResults =>
+            new TestReporter(workDir, listeners).logTestResults(jsResults)
+          }.getOrElse((TestResult.Failed, Map.empty[String, SuiteResult]))
+      }
     }
   }
 

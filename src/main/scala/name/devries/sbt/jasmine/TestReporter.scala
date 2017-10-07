@@ -22,7 +22,7 @@ class TestReporter(workDir: File, listeners: Seq[TestReportListener]) {
 
   private def overallResultFromSuiteResults(suiteResults: Iterable[SuiteResult]) = {
     import sbt.TestResult._
-    suiteResults.foldLeft(Passed) { (a, b) =>
+    suiteResults.foldLeft(Passed.asInstanceOf[TestResult]) { (a, b) =>
       (a, b.result) match {
         case (Error, _) | (_, Error) => Error
         case (Failed, _) | (_, Failed) => Failed
@@ -49,7 +49,7 @@ class TestReporter(workDir: File, listeners: Seq[TestReportListener]) {
     )
   }
 
-  def logTestResults(results: JsValue): (TestResult.Value, Map[String, SuiteResult]) = {
+  def logTestResults(results: JsValue): (TestResult, Map[String, SuiteResult]) = {
     import TestJsonProtocol._
 
     val suite = results.convertTo[TestSuite]
