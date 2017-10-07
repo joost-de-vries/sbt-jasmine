@@ -1,8 +1,15 @@
 sbt-jasmine [![Build Status](https://travis-ci.org/joost-de-vries/sbt-jasmine.png?branch=master)](https://travis-ci.org/joost-de-vries/sbt-jasmine)
 =========
 
-A plugin for running jasmine tests from a Play application using sbt-web.
+A plugin for running jasmine tests from a Play application or using sbt-web.
 
+Add the plugin to `project/plugins.sbt`
+
+    addSbtPlugin("name.de-vries" % "sbt-jasmine" % "0.0.3")
+   
+Put a `jasmine.json` file in your test assets directory. Either `test/assets` or `src/test/assets`. And put your jasmine tests in that same directory. 
+   
+See the `example` directory or the [play-angular-typescript](https://github.com/joost-de-vries/play-angular-typescript.g8) example application.
 
 ### Release notes
 #### v0.0.4
