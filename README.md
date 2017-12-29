@@ -12,6 +12,10 @@ Put a `jasmine.json` file in your test assets directory. Either `test/assets` or
 See the `example` directory or the [play-angular-typescript](https://github.com/joost-de-vries/play-angular-typescript.g8) example application.
 
 ### Release notes
+
+#### v0.0.5
+- upgrade to sbt-web 1.4.3
+
 #### v0.0.4
 - upgrade to sbt 1.0
 

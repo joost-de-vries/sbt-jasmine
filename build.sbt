@@ -4,7 +4,7 @@ import sbt.Keys.crossSbtVersions
 sbtPlugin := true
 organization := "name.de-vries"
 name := "sbt-jasmine"
-version := "0.0.4"
+version := "0.0.5"
 
 
 scalaVersion := (CrossVersion partialVersion sbtCrossVersion.value match {
@@ -13,7 +13,7 @@ scalaVersion := (CrossVersion partialVersion sbtCrossVersion.value match {
   case _             => sys error s"Unhandled sbt version ${sbtCrossVersion.value}"
 })
 
-crossSbtVersions := Seq("0.13.16", "1.0.1")
+crossSbtVersions := Seq("0.13.16", "1.0.4")
 
 val sbtCrossVersion = sbtVersion in pluginCrossBuild
 scalacOptions ++= Seq(
@@ -33,7 +33,7 @@ libraryDependencies ++= Seq(
 dependencyOverrides += "org.webjars.npm" % "glob" % "7.0.5"
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-js-engine" % "1.2.2")
-addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.2")
+addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.3")
 
 scriptedLaunchOpts +=   s"-Dproject.version=${version.value}"
 scriptedLaunchOpts += "-XX:MaxPermSize=256m"
